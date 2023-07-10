@@ -1,0 +1,22 @@
+{
+    "swaggerDefinition":{
+        "info":{
+            "version": "1.0.0",
+            "title": "MundoGym Api",
+            "descripcion": "Documentacion api para su uso",
+            "contact":{
+                "name":"asdasdasdasdas",
+                "url":"asdasdsadasdasassdaasd"
+            },
+            "servers":["/"]
+        }
+    },
+    "basePath":{
+        "default": "v2"
+    },
+    "apis":[
+        "./src/routes/categoryRoutes.js","./src/routes/filterByCategoryRoutes.js",
+        "./src/routes/filterSub.js","./src/routes/orderRouter.js",
+        "./src/routes/productsRoutes.js","./src/routes/subcategoryRoutes.js"
+    ]
+}

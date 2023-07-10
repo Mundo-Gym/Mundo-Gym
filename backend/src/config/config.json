@@ -1,0 +1,32 @@
+{
+  "development": {
+    "username": "mundogymdb",
+    "password": "6KYZBNJ1QYWfvEqnJnwq4geQXqBW7SA8",
+    "database": "mundogym",
+    "host": "dpg-cijc02t9aq01qqijomfg-a.oregon-postgres.render.com",
+    "ssl": true,
+    "dialect": "postgresql",
+    "use_env_variable": true,
+    "url": "postgres://mundogymdb:6KYZBNJ1QYWfvEqnJnwq4geQXqBW7SA8@dpg-cijc02t9aq01qqijomfg-a.oregon-postgres.render.com/mundogym"
+  },
+  "test": {
+    "username": "mundogymdb",
+    "password": "6KYZBNJ1QYWfvEqnJnwq4geQXqBW7SA8",
+    "database": "mundogym",
+    "host": "dpg-cijc02t9aq01qqijomfg-a.oregon-postgres.render.com",
+    "ssl": true,
+    "dialect": "postgresql",
+    "use_env_variable": true,
+    "url": "postgres://mundogymdb:6KYZBNJ1QYWfvEqnJnwq4geQXqBW7SA8@dpg-cijc02t9aq01qqijomfg-a.oregon-postgres.render.com/mundogym"
+  },
+  "production": {
+    "username": "mundogymdb",
+    "password": "6KYZBNJ1QYWfvEqnJnwq4geQXqBW7SA8",
+    "database": "mundogym",
+    "host": "dpg-cijc02t9aq01qqijomfg-a.oregon-postgres.render.com",
+    "ssl": true,
+    "dialect": "postgresql",
+    "use_env_variable": true,
+    "url": "postgres://mundogymdb:6KYZBNJ1QYWfvEqnJnwq4geQXqBW7SA8@dpg-cijc02t9aq01qqijomfg-a.oregon-postgres.render.com/mundogym"
+  }
+}

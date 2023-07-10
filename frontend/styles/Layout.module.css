@@ -1,0 +1,31 @@
+.imgStyle {
+  background-image: linear-gradient(to right, var(--tw-gradient-stops));
+  position: relative;
+
+  overflow: hidden;
+}
+
+.loginImg {
+  background: url("/assets/Login.png") no-repeat;
+  background-position: center;
+  background-size: contain;
+  border-radius: 5px;
+
+  height: 100%;
+  width: 100%;
+  border-radius: 5px 0px 0px 5px;
+  position: relative;
+  background-size: cover;
+  background-position: 65% 0;
+}
+
+@media (max-width: 1000px) {
+  .loginImg {
+    background-position: center;
+    background-size: contain;
+    border-radius: 5px;
+    height: 50%;
+    width: 0%;
+    position: relative;
+  }
+}

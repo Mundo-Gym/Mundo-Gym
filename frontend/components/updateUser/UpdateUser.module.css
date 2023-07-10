@@ -1,0 +1,28 @@
+.container{
+  padding: 5px;
+  margin-bottom: 10px;
+  margin-left:15px;
+  width: 90%;
+  box-shadow: 4px 4px 15px rgba(0,0,0,0.5);
+  border-radius: 20px;
+}
+.titulo{
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+.label{
+  font-weight: bold;
+  font-size: 1rem;
+  text-align: left;
+  margin-left:15px;
+}
+.button{
+  background: rgb(0, 172, 0);
+  color:white;
+  border-radius: 20px;
+  width: 90%;
+  margin-left: 15px;
+  padding: 5px;
+}
