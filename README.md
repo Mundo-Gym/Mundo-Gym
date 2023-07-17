@@ -1,4 +1,4 @@
-<h1 align="center">undo GYM API</h1>
+<h1 align="center">Mundo GYM API</h1>
 <h3 align="center">Dream without fear, train without limits </h3>
 
 This api was made for a gym products distributor. 
