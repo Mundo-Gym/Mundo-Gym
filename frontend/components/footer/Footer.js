@@ -8,7 +8,7 @@ export default function Footer({ session }) {
       <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
-            <Link href="/" className="flex items-center">
+            <Link href="/home" className="flex items-center">
               <Image src={logo} className="h-18 mr-3" alt="MundoGym Logo" />
             </Link>
           </div>

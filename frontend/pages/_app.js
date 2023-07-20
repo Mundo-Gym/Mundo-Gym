@@ -9,7 +9,7 @@ import { CssBaseline } from "@mui/material";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
-  const inLogin = router.pathname.slice(0, 6);
+  const inLogin = router.pathname.slice(0, 5);
 
   return (
     <SessionProvider session={pageProps.session}>
@@ -17,7 +17,7 @@ function MyApp({ Component, pageProps }) {
         <>
           <CssBaseline />
           <Component {...pageProps} />
-          {inLogin !== "/login" && inLogin !== "/succe"?<Car /> : null}
+          {inLogin !== "/logi" && inLogin !== "/succ" && inLogin !== "/team"?<Car /> : null}
         </>
       </Providers>
     </SessionProvider>
