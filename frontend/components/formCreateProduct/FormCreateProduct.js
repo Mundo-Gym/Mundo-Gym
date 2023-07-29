@@ -141,14 +141,14 @@ const FormCreateProduct = () => {
     setFlagSelectCat(false);
   };
 
-  // const handlerSubcategory = (e) => {
-  //   setFlagSelectSub(false);
-  //   e.preventDefault();
-  //   if (e.target.value !== "allSubcategories") {
-  //     setErrors("");
-  //     setForm({ ...form, subcategory: [...form.subcategory, e.target.value] });
-  //   }
-  // };
+  const handlerSubcategory = (e) => {
+    setFlagSelectSub(false);
+    e.preventDefault();
+    if (e.target.value !== "allSubcategories") {
+      setErrors("");
+      setForm({ ...form, subcategory: [...form.subcategory, e.target.value] });
+    }
+  };
 
   //*************************************************** */
   const [fileImage, setFileImage] = useState({ array: {} });
@@ -229,7 +229,7 @@ const FormCreateProduct = () => {
                 ) : null}
               </div>
             </div>
-            {/* <div className="border-0 p-[5px_10px] mb-[10px] flex  rounded-[10px] w-[100%] shadow-[1px_1px_10px_rgba(0,0,0,0.3)] font-bold">
+            <div className="border-0 p-[5px_10px] mb-[10px] flex  rounded-[10px] w-[100%] shadow-[1px_1px_10px_rgba(0,0,0,0.3)] font-bold">
               <label>Subcategoria: </label>
               <div className="">
                 {!flagSelectSub ? (
@@ -264,7 +264,7 @@ const FormCreateProduct = () => {
                   </div>
                 ) : null}
               </div>
-            </div> */}
+            </div>
 
             <div className="border-0 p-[5px_10px] mb-[10px] flex   rounded-[10px] w-[100%] shadow-[1px_1px_10px_rgba(0,0,0,0.3)]  font-bold">
               <label htmlFor="price">Precio:</label>

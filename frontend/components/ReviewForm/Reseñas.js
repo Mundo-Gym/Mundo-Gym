@@ -30,7 +30,7 @@ const Review = ({ productId, userId }) => {
 
     productId &&
       axios
-        .post(`https://backend-6ao2.onrender.com/products/${productId}/review`, calification)
+        .post(`http://localhost:3001/products/${productId}/review`, calification)
         .then((response) => {
           if (response.status === 201) {
             setReviewSaved(true);
