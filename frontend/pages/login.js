@@ -31,7 +31,7 @@ export default function Login() {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3001/auth/login",
+        "https://api-mundo-gym.onrender.com/auth/login",
         formData
       );
 

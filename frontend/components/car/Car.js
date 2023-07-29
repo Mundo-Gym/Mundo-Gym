@@ -68,7 +68,7 @@ export default function Car() {
   const checkout = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:3001/app/create-order",
+        "https://api-mundo-gym.onrender.com/app/create-order",
         { items, inSession }
       );
       const data = await response.data;
