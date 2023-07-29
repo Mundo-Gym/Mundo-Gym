@@ -15,7 +15,9 @@ let sequelize;
 if (config.use_env_variable) {
   const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME } = process.env;
   sequelize = new Sequelize(
-    `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
+    // `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`
+    // 'postgres://mundogymdb:sktpUAFTtdxHvZDvrAkTR3Tj4SnXY7Kz@dpg-cj2a3q5iuie55pg99nj0-a/mundogym_xd1i'
+    'postgres://mundogymdb:sktpUAFTtdxHvZDvrAkTR3Tj4SnXY7Kz@dpg-cj2a3q5iuie55pg99nj0-a.oregon-postgres.render.com/mundogym_xd1i',
     {
       dialect: "postgres",
       logging: false,

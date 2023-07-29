@@ -14,16 +14,28 @@ const secretKey = process.env.SECRETKEY;
 const Sequelize = require("sequelize");
 
 const create = async (data) => {
+  
   try {
     let result;
     let dataPerson = null;
+    //*************************************************/
+    // try {
+    //   User_type.create({
+    //     name:'admin'
+    //   });
+    //   return 'creado con exito'
+    // } catch (error) {
+    //   console.log(error.message)
+    // }
+    //*************************************************/
     let dataUserType = await User_type.findOne({
       where: {
         name: {
-          [Op.eq]: "cliente",
+          [Op.eq]: "admin",
         },
       },
     });
+    //return console.log('-------1',dataUserType)
     if (dataUserType) {
       let verificarData = await Person_data.findOne({
         where: {
