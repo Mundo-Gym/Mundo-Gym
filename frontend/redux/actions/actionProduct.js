@@ -15,7 +15,7 @@ require("dotenv").config();
 export const getProd = () => (dispatch) => {
   (async () => {
     let products = await axios(
-      "https://backend-6ao2.onrender.com/products/"
+      "http://localhost:3001/products/"
     ).then(({ data }) => {
       data.forEach((p) => {
         if (p.stock === 0 && p.visible) dispatch(switchProduct(p.id));
@@ -30,7 +30,7 @@ export const getProd = () => (dispatch) => {
 export const getProdsByCat = (cat) => (dispatch) => {
   (async () => {
     const categoryProducts = await axios(
-      `https://backend-6ao2.onrender.com/filterByCategory?category=${cat}`
+      `http://localhost:3001/filterByCategory?category=${cat}`
     ).then(({ data }) => data);
     dispatch(getProductsByCategory(categoryProducts));
   })();
@@ -39,14 +39,14 @@ export const getProdsByCat = (cat) => (dispatch) => {
 export const getProdsBySubCat = (subCat) => (dispatch) => {
   (async () => {
     const subCategoryProducts = await axios(
-      `https://backend-6ao2.onrender.com/filterSub?subcategory=${subCat}`
+      `http://localhost:3001/filterSub?subcategory=${subCat}`
     ).then(({ data }) => data);
     dispatch(getProductsBySubCategory(subCategoryProducts));
   })();
 };
 
 export const createProd = (prod) => (dispatch) => {
-  const url = "https://backend-6ao2.onrender.com/products/";
+  const url = "http://localhost:3001/products/";
   axios
     .post(url, prod, {
       headers: {
@@ -65,7 +65,7 @@ export const createProd = (prod) => (dispatch) => {
 export const getProductById = (id) => async (dispatch) => {
   try {
     const response = await axios.get(
-      `https://backend-6ao2.onrender.com/products/${id}`
+      `http://localhost:3001/products/${id}`
     );
     const productById = response.data;
     dispatch(getProdById(productById));
@@ -89,7 +89,7 @@ export const getProductByName = (name) => (dispatch) => {
   (async () => {
     try {
       const prodByName = await axios(
-        `https://backend-6ao2.onrender.com/products?name=${name}`
+        `http://localhost:3001/products?name=${name}`
       ).then(({ data }) => data);
       if (prodByName.length > 0) {
         dispatch(searchProduct(prodByName));
