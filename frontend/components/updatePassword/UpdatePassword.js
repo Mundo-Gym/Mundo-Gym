@@ -15,7 +15,7 @@ const UpdatePassword = ({ token }) => {
 
     try {
       const response = await axios.post(
-        `http://localhost:3001/auth/changepass/${token}`,
+        `https://api-mundo-gym.onrender.com/auth/changepass/${token}`,
         formData
       );
 

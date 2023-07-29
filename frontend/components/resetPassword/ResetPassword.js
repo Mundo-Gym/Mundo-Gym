@@ -12,7 +12,7 @@ const ResetPassword = ({ email }) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3001/reset",
+        "https://api-mundo-gym.onrender.com/reset",
         formData
       );
       console.log(formData);

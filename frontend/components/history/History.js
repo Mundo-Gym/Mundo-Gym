@@ -48,7 +48,7 @@ export default function History() {
     if (inSession.typeUser === "cliente") {
       dispatch(getAllHistory(inSession.id));
     } else if (inSession.typeUser === "admin") {
-      axios("http://localhost:3001/auth/compras")
+      axios("https://api-mundo-gym.onrender.com/auth/compras")
         .then(({ data }) => {
           dispatch(getHistory({ data }));
         })

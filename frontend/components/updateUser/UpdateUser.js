@@ -20,7 +20,7 @@ export default function UpdateUser() {
   const handleSubmit = (e) => {
     e.preventDefault;
     localStorage.setItem("sessionActive", JSON.stringify(dataUser));
-    axios.put("http://localhost:3001/auth/update", dataUser);
+    axios.put("https://api-mundo-gym.onrender.com/auth/update", dataUser);
   };
 
   return (
