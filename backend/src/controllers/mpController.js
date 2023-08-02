@@ -155,7 +155,7 @@ module.exports = {
 
 // const successOrder = (req, res) => {
 //   res.send("compra exitosa");
-//   // res.redirect("https://backend-6ao2.onrender.com/home");
+//   // res.redirect("http://localhost:3001/home");
 // };
 
 // const notificarOrder = async (req, res) => {

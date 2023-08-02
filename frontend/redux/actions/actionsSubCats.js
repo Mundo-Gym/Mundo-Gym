@@ -8,14 +8,14 @@ import axios from "axios";
 export const getSubCats = () => (dispatch) => {
   (async () => {
     const subCategories = await axios(
-      "https://backend-6ao2.onrender.com/subcategory"
+      "https://api-mundo-gym.onrender.com/subcategory"
     ).then(({ data }) => data);
     dispatch(getSubCategories(subCategories));
   })();
 };
 
 export const addSubCategory = (name) => (dispatch) => {
-  const url = "https://backend-6ao2.onrender.com/subCategory";
+  const url = "https://api-mundo-gym.onrender.com/subCategory";
   const data = { name };
   axios
     .post(url, data)
@@ -30,7 +30,7 @@ export const addSubCategory = (name) => (dispatch) => {
 
 export const deleteSubCateg = (id) => (dispatch) => {
   try {
-    axios.delete(`https://backend-6ao2.onrender.com/subCategory/${id}`);
+    axios.delete(`https://api-mundo-gym.onrender.com/subCategory/${id}`);
     return dispatch(deleteSubCategory());
   } catch (error) {
     return {

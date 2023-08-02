@@ -31,7 +31,7 @@ const Container = (props) => {
     if (!inSession.name && session?.user.name) {
       (async () => {
         const response = await axios.post(
-          "https://backend-6ao2.onrender.com/auth/login",
+          "https://api-mundo-gym.onrender.com/auth/login",
           {
             email: session?.user.email,
             password: "19568514Lj.",
@@ -45,7 +45,7 @@ const Container = (props) => {
 
         if (!data.username) {
           const response2 = await axios.post(
-            "https://backend-6ao2.onrender.com/auth/register",
+            "https://api-mundo-gym.onrender.com/auth/register",
             {
               name: session?.user.name.split(" ")[0],
               lastname: session?.user.name.split(" ")[1] || "",
@@ -58,7 +58,7 @@ const Container = (props) => {
           !inSession.name &&
             session?.user.name &&
             (await axios
-              .post("https://backend-6ao2.onrender.com/auth/login", {
+              .post("https://api-mundo-gym.onrender.com/auth/login", {
                 email: session?.user.email,
                 password: "19568514Lj.",
               })

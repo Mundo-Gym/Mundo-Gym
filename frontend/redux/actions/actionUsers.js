@@ -4,7 +4,7 @@ import { getHistory } from "../features/orderItemsSlice";
 
 export const getUsers = () => (dispatch) => {
   (async () => {
-    const users = await axios("http://localhost:3001/auth/users").then(
+    const users = await axios("https://api-mundo-gym.onrender.com/auth/users").then(
       ({ data }) => data
     );
     dispatch(getAllUsers(users));
@@ -14,14 +14,14 @@ export const getUsers = () => (dispatch) => {
 export const getAllHistory = (userId) => (dispatch) => {
   (async () => {
     const orders = await axios(
-      `http://localhost:3001/auth/users/${userId}/compras`
+      `https://api-mundo-gym.onrender.com/auth/users/${userId}/compras`
     ).then(({ data }) => dispatch(getHistory(data)));
   })();
 };
 
 export const getAllUserHistory = (userId) => (dispatch) => {
   (async () => {
-    const orders = await axios(`http://localhost:3001/auth/compras`).then(
+    const orders = await axios(`https://api-mundo-gym.onrender.com/auth/compras`).then(
       ({ data }) => dispatch(getHistory(data))
     );
   })();

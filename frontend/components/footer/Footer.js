@@ -8,7 +8,7 @@ export default function Footer({ session }) {
       <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
-            <Link href="https://flowbite.com/" className="flex items-center">
+            <Link href="/home" className="flex items-center">
               <Image src={logo} className="h-18 mr-3" alt="MundoGym Logo" />
             </Link>
           </div>
@@ -28,8 +28,8 @@ export default function Footer({ session }) {
                 <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Siguenos</h2>
                   <ul className="text-gray-600 dark:text-gray-400 font-medium">
                     <li className="mb-4">
-                      <Link href="https://github.com/Pf-henry-2023" className="hover:underline ">Github</Link>
-                      
+                      <Link href="https://github.com/Mundo-Gym/Mundo-Gym" className="hover:underline ">Github</Link>
+
                     </li>
                   </ul>
                 </div>

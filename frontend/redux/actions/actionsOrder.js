@@ -10,7 +10,7 @@ import {
 } from "../features/productsSlice";
 import axios from "axios";
 
-const API_URL = "https://backend-6ao2.onrender.com";
+const API_URL = "https://api-mundo-gym.onrender.com";
 const az = "AZ";
 const za = "ZA";
 const mayorm = "Mm";

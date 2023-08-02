@@ -24,7 +24,7 @@ export default function Success() {
       const order = localStorage.getItem("orderItems");
       const stocks = JSON.parse(order);
       await axios
-        .post("http://localhost:3001/app/success", orderBuy)
+        .post("https://api-mundo-gym.onrender.com/app/success", orderBuy)
         .then(router.push("/home"));
     } catch (error) {
       window.location.href = "/home";

@@ -31,7 +31,7 @@ export default function ProductDetail({ id }) {
   const checkout = async () => {
     try {
       const response = await fetch(
-        "https://backend-6ao2.onrender.com/app/create-order",
+        "https://api-mundo-gym.onrender.com/app/create-order",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

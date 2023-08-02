@@ -34,7 +34,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3001/auth/register",
+        "https://api-mundo-gym.onrender.com/auth/register",
         formData
       );
       console.log(formData);
@@ -44,7 +44,7 @@ const Register = () => {
         setErrorMessage(data.error.message);
       } else {
         await axios
-          .post("http://localhost:3001/users/signup", formData)
+          .post("https://api-mundo-gym.onrender.com/users/signup", formData)
           .then(router.push("/login"));
       }
     } catch (error) {
