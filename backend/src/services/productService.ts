@@ -18,13 +18,13 @@ export async function listProducts() {
   // Populate category and subcategory names for frontend convenience
   const products = await Product.find()
     .sort({ createdAt: -1 })
-    .populate("category", "name")
-    .populate("subcategory", "name")
+    .populate("categoryId", "name")
+    .populate("subcategoryId", "name")
     .lean();
 
   return products.map((p: any) => ({
     ...p,
-    categoryName: p.category?.name || null,
-    subcategoryName: p.subcategory?.name || null,
+    categoryName: p.categoryId?.name || null,
+    subcategoryName: p.subcategoryId?.name || null,
   }));
 }
