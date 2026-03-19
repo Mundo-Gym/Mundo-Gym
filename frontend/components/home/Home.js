@@ -45,7 +45,7 @@ const GridItem = ({ children }) => {
   );
 };
 
-export default function Home() {
+export default function Home({ initialProducts = [] }) {
   const numPaginate = useSelector((s) => s.numPaginate.value);
   const products = useSelector((s) => s.products.value);
   let find = useSelector((s) => s.products.find);
@@ -68,7 +68,12 @@ export default function Home() {
 
   // Ensure products are loaded when Home mounts
   useEffect(() => {
-    dispatch(getProd());
+    if (initialProducts && initialProducts.length > 0) {
+      // hydrate store with pre-fetched products from SSG/ISR
+      dispatch(getProducts(initialProducts));
+    } else {
+      dispatch(getProd());
+    }
   }, [dispatch]);
 
   // Debug: log products state to help diagnose mapping issues
