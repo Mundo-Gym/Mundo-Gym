@@ -13,7 +13,8 @@ import { getSubCats } from "../../redux/actions/actionsSubCats";
 import { cleanProductById } from "../../redux/features/productsSlice";
 import { getUser } from "../../redux/features/userSlice";
 import { signIn, useSession } from "next-auth/react";
-import axios from "axios";
+import axios from "../../lib/api";
+import { cleanStack } from "../../redux/features/carStackSlice";
 
 const Container = (props) => {
   const { data: session } = useSession();
@@ -30,44 +31,50 @@ const Container = (props) => {
   useEffect(() => {
     if (!inSession.name && session?.user.name) {
       (async () => {
-        const response = await axios.post(
-          "https://api-mundo-gym.onrender.com/auth/login",
-          {
-            email: session?.user.email,
-            password: "19568514Lj.",
-          }
-        );
+        const response = await axios.post("/api/auth/login", {
+          email: session?.user.email,
+          password: "19568514Lj.",
+        });
 
         let data = await response.data;
 
         dispatch(getUser(data));
         localStorage.setItem("sessionActive", JSON.stringify(data));
 
+        // After obtaining user data, attempt to merge local cart into server cart
+        try {
+          const localCar = localStorage.getItem("car");
+          const parsed = localCar ? JSON.parse(localCar) : null;
+          if (parsed && Array.isArray(parsed) && parsed.length > 0) {
+            await axios.post("/carts/merge", { items: parsed });
+            // clear local cart and redux stack to avoid duplicates
+            localStorage.removeItem("car");
+            dispatch(cleanStack());
+          }
+        } catch (err) {
+          console.warn("cart merge failed:", err?.response?.data || err.message || err);
+        }
+
         if (!data.username) {
-          const response2 = await axios.post(
-            "https://api-mundo-gym.onrender.com/auth/register",
-            {
-              name: session?.user.name.split(" ")[0],
-              lastname: session?.user.name.split(" ")[1] || "",
-              username: session?.user.email.split("@")[0],
-              email: session?.user.email,
-              password: "19568514Lj.",
-            }
-          );
+          const response2 = await axios.post("/api/auth/register", {
+            name: session?.user.name.split(" ")[0],
+            lastname: session?.user.name.split(" ")[1] || "",
+            username: session?.user.email.split("@")[0],
+            email: session?.user.email,
+            password: "19568514Lj.",
+          });
           //window.location.href = '/home';
           !inSession.name &&
             session?.user.name &&
-            (await axios
-              .post("https://api-mundo-gym.onrender.com/auth/login", {
-                email: session?.user.email,
-                password: "19568514Lj.",
-              })
-              .then(({ data }) => {
-                if (data.name) {
-                  dispatch(getUser(data));
-                  localStorage.setItem("sessionActive", JSON.stringify(data));
-                }
-              }));
+            (await axios.post("/api/auth/login", {
+              email: session?.user.email,
+              password: "19568514Lj.",
+            }).then(({ data }) => {
+              if (data.name) {
+                dispatch(getUser(data));
+                localStorage.setItem("sessionActive", JSON.stringify(data));
+              }
+            }));
         }
       })();
     }
@@ -100,15 +107,16 @@ const Container = (props) => {
   // }
 
   return (
-    <div className="overflow-x-hidden	">
+    <div className="overflow-x-hidden">
       <Head>
         <title>Mundo Gym</title>
         <link rel="icon" href="/favicon.png" />
       </Head>
       <div>
-        <Nav />
+        {/* Nav and Footer are now handled by the global Layout component in _app.js */}
+        {/* <Nav /> */}
         {props.children}
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </div>
   );
