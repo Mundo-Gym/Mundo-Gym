@@ -1,25 +1,21 @@
-const { shopping_cart, shopping_cart_detail, Products } = require("../models");
+// OLD_SEQUELIZE: original Sequelize implementation (kept for reference)
+// OLD_SEQUELIZE: const { shopping_cart, shopping_cart_detail, Products } = require("../models");
+// OLD_SEQUELIZE: (see history) - used Sequelize models shopping_cart and shopping_cart_detail
+
+const shoppingCartAdapter = require("../adapters/shoppingCartAdapter");
+const productsAdapter = require("../adapters/productsAdapter");
 
 // Controlador para obtener el carrito de compras
 exports.getShoppingCart = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    const shoppingCart = await shopping_cart.findOne({
-      where: { userId },
-      include: [
-        {
-          model: shopping_cart_detail,
-          as: "details",
-          include: { model: Products, as: "product" },
-        },
-      ],
-    });
+    const shoppingCart = await shoppingCartAdapter.findByUserId(userId);
 
-    res.json(shoppingCart);
+    return res.json(shoppingCart);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Error al obtener el carrito de compras" });
+    return res.status(500).json({ error: "Error al obtener el carrito de compras" });
   }
 };
 
@@ -28,40 +24,22 @@ exports.addProductToCart = async (req, res) => {
   try {
     const { userId, productId, quantity } = req.body;
 
-    // Verificar si el carrito de compras existe para el usuario
-    let shoppingCart = await shopping_cart.findOne({ where: { userId } });
-
+    // Obtener o crear carrito
+    let shoppingCart = await shoppingCartAdapter.findByUserId(userId);
     if (!shoppingCart) {
-      // Si no existe, crear un nuevo carrito de compras
-      shoppingCart = await shopping_cart.create({ userId });
+      shoppingCart = await shoppingCartAdapter.createCartForUser(userId);
     }
 
-    // Verificar si el producto ya está en el carrito
-    const cartDetail = await shopping_cart_detail.findOne({
-      where: { shopping_cart_id: shoppingCart.id, product_id: productId },
-    });
+    // Obtener producto para precio (si existe)
+    const product = await productsAdapter.findById(productId);
+    const price = product && product.price ? product.price : 0;
 
-    if (cartDetail) {
-      // Si el producto ya está en el carrito, actualizar la cantidad
-      cartDetail.quantity += quantity;
-      await cartDetail.save();
-    } else {
-      // Si el producto no está en el carrito, agregarlo como un nuevo detalle
-      await shopping_cart_detail.create({
-        shopping_cart_id: shoppingCart.id,
-        product_id: productId,
-        quantity,
-      });
-    }
+    await shoppingCartAdapter.addItem(shoppingCart, productId, quantity, price);
 
-    res
-      .status(200)
-      .json({ message: "Producto agregado al carrito de compras" });
+    return res.status(200).json({ message: "Producto agregado al carrito de compras" });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ error: "Error al agregar el producto al carrito de compras" });
+    return res.status(500).json({ error: "Error al agregar el producto al carrito de compras" });
   }
 };
 
@@ -71,37 +49,47 @@ exports.removeProductFromCart = async (req, res) => {
     const { userId, productId } = req.body;
 
     // Buscar el carrito de compras del usuario
-    const shoppingCart = await shopping_cart.findOne({ where: { userId } });
+    const shoppingCart = await shoppingCartAdapter.findByUserId(userId);
 
     if (!shoppingCart) {
-      // Si no hay carrito de compras, retornar un mensaje de error
-      return res
-        .status(404)
-        .json({ error: "Carrito de compras no encontrado" });
+      return res.status(404).json({ error: "Carrito de compras no encontrado" });
     }
 
-    // Buscar el detalle del producto en el carrito
-    const cartDetail = await shopping_cart_detail.findOne({
-      where: { shopping_cart_id: shoppingCart.id, product_id: productId },
-    });
+    await shoppingCartAdapter.removeItem(shoppingCart, productId);
 
-    if (!cartDetail) {
-      // Si el detalle no existe, retornar un mensaje de error
-      return res
-        .status(404)
-        .json({ error: "Producto no encontrado en el carrito de compras" });
-    }
-
-    // Eliminar el detalle del producto del carrito
-    await cartDetail.destroy();
-
-    res
-      .status(200)
-      .json({ message: "Producto eliminado del carrito de compras" });
+    return res.status(200).json({ message: "Producto eliminado del carrito de compras" });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ error: "Error al eliminar el producto del carrito de compras" });
+    return res.status(500).json({ error: "Error al eliminar el producto del carrito de compras" });
+  }
+};
+
+// Merge local cart into user's server cart
+exports.mergeCart = async (req, res) => {
+  try {
+    const userId = req.user?.id || req.user?._id || req.body.userId;
+    const localItems = req.body.items || [];
+
+    if (!userId) return res.status(400).json({ error: "User id missing for merge" });
+
+    let shoppingCart = await shoppingCartAdapter.findByUserId(userId);
+    if (!shoppingCart) {
+      shoppingCart = await shoppingCartAdapter.createCartForUser(userId);
+    }
+
+    // localItems expected: [{ productId, quantity }]
+    for (const it of localItems) {
+      const productId = it.productId || it.product || it.id;
+      const qty = parseInt(it.quantity, 10) || 1;
+      const product = await productsAdapter.findById(productId);
+      const price = product && product.price ? product.price : 0;
+      await shoppingCartAdapter.addItem(shoppingCart, productId, qty, price);
+    }
+
+    const updated = await shoppingCartAdapter.findByUserId(userId);
+    return res.status(200).json({ message: "Cart merged", cart: updated });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Error merging cart" });
   }
 };
