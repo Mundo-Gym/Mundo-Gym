@@ -3,11 +3,11 @@ import {
   createCategory,
   deleteCategories,
 } from "../features/categorySlice";
-import axios from "axios";
+import axios from "../../lib/api";
 
 export const getCat = () => (dispatch) => {
   (async () => {
-    await axios("https://api-mundo-gym.onrender.com/category")
+    await axios("/api/categories")
       .then((res) => res)
       .then(({ data }) => {
         dispatch(getCategories(data));
@@ -16,7 +16,7 @@ export const getCat = () => (dispatch) => {
 };
 
 export const addCat = (name) => (dispatch) => {
-  const url = "https://api-mundo-gym.onrender.com/category/";
+  const url = "/api/categories/";
   const data = { name };
   axios
     .post(url, data)
@@ -31,7 +31,7 @@ export const addCat = (name) => (dispatch) => {
 
 export const deleteCategory = (id) => (dispatch) => {
   try {
-    axios.delete(`https://api-mundo-gym.onrender.com/category/${id}`);
+    axios.delete(`/api/categories/${id}`);
     return dispatch(deleteCategories());
   } catch (error) {
     return {

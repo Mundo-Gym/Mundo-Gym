@@ -3,19 +3,17 @@ import {
   createSubCategory,
   deleteSubCategory,
 } from "../features/subCategorySlice";
-import axios from "axios";
+import axios from "../../lib/api";
 
 export const getSubCats = () => (dispatch) => {
   (async () => {
-    const subCategories = await axios(
-      "https://api-mundo-gym.onrender.com/subcategory"
-    ).then(({ data }) => data);
+    const subCategories = await axios("/api/subcategories").then(({ data }) => data);
     dispatch(getSubCategories(subCategories));
   })();
 };
 
 export const addSubCategory = (name) => (dispatch) => {
-  const url = "https://api-mundo-gym.onrender.com/subCategory";
+  const url = "/api/subcategories";
   const data = { name };
   axios
     .post(url, data)
@@ -30,7 +28,7 @@ export const addSubCategory = (name) => (dispatch) => {
 
 export const deleteSubCateg = (id) => (dispatch) => {
   try {
-    axios.delete(`https://api-mundo-gym.onrender.com/subCategory/${id}`);
+    axios.delete(`/api/subcategories/${id}`);
     return dispatch(deleteSubCategory());
   } catch (error) {
     return {

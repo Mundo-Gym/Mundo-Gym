@@ -23,7 +23,17 @@ export default function ProductCard({ product, className = "" }) {
   const [isFav, setIsFav] = useState(false);
   const [isStack, setIsStack] = useState(false);
 
-  const { name, image, price, Category, id, description, stock } = product;
+  const { name, image, price, Category, id, description, stock, category } = product;
+
+  const categories = useSelector((s) => s.categories.value);
+  // Resolve category name from store when backend returns an id
+  const resolvedCategoryName =
+    categories?.find((c) => c._id === category || c.id === category)?.name ||
+    Category ||
+    "Equipment";
+
+  const imageSrc = image || "/assets/upload.png";
+  const [imgSrc, setImgSrc] = useState(imageSrc);
 
   const selectFav = (e) => {
     e.preventDefault();
@@ -71,12 +81,11 @@ export default function ProductCard({ product, className = "" }) {
       {/* Image Container */}
       <div className="relative h-48 overflow-hidden bg-background-dark">
         <Link href={`/product/${id}`} className="block w-full h-full">
-          <Image
-            src={image}
+          <img
+            src={imgSrc}
             alt={name}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-110 cursor-pointer"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            onError={() => setImgSrc('/assets/upload.png')}
+            className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110 cursor-pointer"
           />
         </Link>
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-80 pointer-events-none" />
@@ -84,7 +93,7 @@ export default function ProductCard({ product, className = "" }) {
         {/* Badges & Actions */}
         <div className="absolute top-3 left-3 z-10">
            <Badge variant="primary" size="sm">
-             {Category || "Equipment"}
+             {resolvedCategoryName}
            </Badge>
         </div>
 
@@ -111,7 +120,7 @@ export default function ProductCard({ product, className = "" }) {
 
       {/* Content */}
       <div className="p-5">
-        <Link href={`/product/${id}`}>
+          <Link href={`/product/${id}`}>
           <h3 className="text-lg font-heading font-bold text-white mb-2 line-clamp-1 group-hover:text-primary transition-colors cursor-pointer">
             {name}
           </h3>
@@ -122,7 +131,7 @@ export default function ProductCard({ product, className = "" }) {
         </p>
 
         <div className="flex justify-between items-center mt-auto">
-          <span className="text-xl font-bold text-white">
+            <span className="text-xl font-bold text-white">
             ${price?.toLocaleString()}
           </span>
           
