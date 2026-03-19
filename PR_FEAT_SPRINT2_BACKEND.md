@@ -59,6 +59,27 @@ curl -X POST http://localhost:3001/api/cart/merge \
   -d '{ "items": [{"productId":"<id>","quantity":2}] }'
 ```
 
+### Pruebas manuales (ejemplos curl)
+
+1) POST /api/carts/merge (fusionar carrito local -> servidor)
+
+```bash
+# ejemplo: fusionar items del carrito local hacia el carrito del usuario autenticado
+curl -v -X POST http://localhost:3001/api/carts/merge \
+  -H "Content-Type: application/json" \
+  --cookie "connect.sid=<tu_cookie_de_sesion>; token=<tu_cookie_jwt>" \
+  -d '{ "items": [{"productId":"<productId>","quantity":2}] }'
+```
+
+2) GET /api/carts (obtener carritos — buscar el cart del usuario para validar)
+
+```bash
+# obtiene lista de carts; localizar el cart del usuario (userId)
+curl -sS http://localhost:3001/api/carts --cookie "token=<tu_cookie_jwt>" | jq '.'
+```
+
+Nota: el frontend usa `/api/carts/merge` y luego solicita el carrito del servidor; si tu entorno expone los endpoints sin el prefijo `/api`, ajustá `http://localhost:3001` según corresponda.
+
 ## Reviewers sugeridos
 - @maintainer
 - @frontend-dev

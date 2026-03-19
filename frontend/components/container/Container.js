@@ -14,7 +14,7 @@ import { cleanProductById } from "../../redux/features/productsSlice";
 import { getUser } from "../../redux/features/userSlice";
 import { signIn, useSession } from "next-auth/react";
 import axios from "../../lib/api";
-import { cleanStack } from "../../redux/features/carStackSlice";
+import { cleanStack, addStorageProducts } from "../../redux/features/carStackSlice";
 
 const Container = (props) => {
   const { data: session } = useSession();
@@ -46,7 +46,56 @@ const Container = (props) => {
           const localCar = localStorage.getItem("car");
           const parsed = localCar ? JSON.parse(localCar) : null;
           if (parsed && Array.isArray(parsed) && parsed.length > 0) {
-            await axios.post("/carts/merge", { items: parsed });
+            // POST to server merge endpoint (use /api prefix)
+            const mergeResp = await axios.post("/api/carts/merge", { items: parsed });
+
+            // Try to obtain the merged cart from the response
+            let serverCartItems = [];
+            const merged = mergeResp?.data?.cart;
+            if (merged && merged.items) {
+              serverCartItems = merged.items.map((it) => {
+                const product = it.product || {};
+                return {
+                  id: product._id || product.id || it.productId || product._id,
+                  name: product.name || product.title || "",
+                  price: product.price || it.price || 0,
+                  quantity: it.quantity || 1,
+                  description: product.description || "",
+                  unit_price: product.price || it.price || 0,
+                  currency_id: product.currency || "ARS",
+                  title: product.name || product.title || "",
+                };
+              });
+            } else {
+              // Fallback: request carts list and try to find user's cart
+              try {
+                const cartsResp = await axios.get("/api/carts");
+                const carts = cartsResp.data;
+                const userId = data?.id || data?._id || data?.userId;
+                const userCart = Array.isArray(carts)
+                  ? carts.find((c) => String(c.userId || c.user) === String(userId))
+                  : carts;
+                if (userCart && userCart.items) {
+                  serverCartItems = userCart.items.map((it) => ({
+                    id: it.productId || it.product?._id || it.product,
+                    name: it.product?.name || "",
+                    price: it.unitPrice || it.price || it.product?.price || 0,
+                    quantity: it.quantity || 1,
+                    description: it.product?.description || "",
+                    unit_price: it.unitPrice || it.unit_price || it.price || 0,
+                    currency_id: "ARS",
+                    title: it.product?.name || "",
+                  }));
+                }
+              } catch (e) {
+                console.warn("failed to fetch carts after merge", e?.response?.data || e.message || e);
+              }
+            }
+
+            if (serverCartItems.length > 0) {
+              dispatch(addStorageProducts(serverCartItems));
+            }
+
             // clear local cart and redux stack to avoid duplicates
             localStorage.removeItem("car");
             dispatch(cleanStack());
