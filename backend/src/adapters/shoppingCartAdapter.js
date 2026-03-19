@@ -1,5 +1,17 @@
-const CartModule = require('../models/Cart');
-const ShoppingCart = CartModule && (CartModule.Cart || CartModule.default || CartModule);
+let ShoppingCart;
+const tryRequire = (p) => {
+  try { return require(p); } catch (e) { return null; }
+};
+
+// Try multiple common locations / export shapes to be resilient in mixed TS/JS project
+ShoppingCart = tryRequire('../models/mongoose/ShoppingCart') ||
+  (function(){ const m = tryRequire('../models/Cart') || tryRequire('../models/Cart.ts') || tryRequire('../models/Cart.js');
+    if (!m) return null; return (m.Cart || m.default || m); })();
+
+if (!ShoppingCart) {
+  // Keep the original error informative for CI/devs
+  throw new Error('ShoppingCart model not found. Tried ../models/mongoose/ShoppingCart and ../models/Cart(.ts|.js).');
+}
 
 module.exports = {
   findByUserId: (userId) => ShoppingCart.findOne({ user: userId }).populate('items.product'),
